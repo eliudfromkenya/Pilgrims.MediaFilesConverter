@@ -25,5 +25,5 @@ Provide an easy-to-use, consistent interface for:
 - Intuitive UI for selecting source files and destination folders
 
 ## Screenshots (Sample UI)
-![Main UI](Screen Images/Screenshot1.png)
-![Conversion/Preview UI](Screen Images/Screenshot2.png)
+![Main UI]("Screen Images/Screenshot1.png")
+![Conversion/Preview UI]("Screen Images/Screenshot2.png")
