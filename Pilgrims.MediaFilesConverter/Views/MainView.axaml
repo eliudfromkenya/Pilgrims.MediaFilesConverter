@@ -1,0 +1,711 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Pilgrims.MediaFilesConverter.ViewModels"
+             xmlns:models="using:Pilgrims.MediaFilesConverter.Models"
+             xmlns:converters="using:Pilgrims.MediaFilesConverter.Converters"
+             xmlns:controls="using:Pilgrims.MediaFilesConverter.Controls"
+             xmlns:views="using:Pilgrims.MediaFilesConverter.Views"
+			 xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+             x:Class="Pilgrims.MediaFilesConverter.Views.MainView"
+             x:DataType="vm:MainViewModel">
+  
+  <Design.DataContext>
+    <vm:MainViewModel />
+  </Design.DataContext>
+
+  <UserControl.Resources>
+    <converters:VideoQualityConverter x:Key="VideoQualityConverter"/>
+    <converters:AudioQualityConverter x:Key="AudioQualityConverter"/>
+    
+    <!-- Stunning Gradient Brushes -->
+    <LinearGradientBrush x:Key="PrimaryGradient" StartPoint="0%,0%" EndPoint="100%,100%">
+      <GradientStop Color="#667EEA" Offset="0"/>
+      <GradientStop Color="#764BA2" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="AccentGradient" StartPoint="0%,0%" EndPoint="100%,100%">
+      <GradientStop Color="#F093FB" Offset="0"/>
+      <GradientStop Color="#F5576C" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="SuccessGradient" StartPoint="0%,0%" EndPoint="100%,100%">
+      <GradientStop Color="#4FACFE" Offset="0"/>
+      <GradientStop Color="#00F2FE" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="BackgroundGradient" StartPoint="0%,0%" EndPoint="100%,100%">
+      <GradientStop Color="#F8FAFC" Offset="0"/>
+      <GradientStop Color="#E2E8F0" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="CardGradient" StartPoint="0%,0%" EndPoint="100%,100%">
+      <GradientStop Color="#FFFFFF" Offset="0"/>
+      <GradientStop Color="#F7FAFC" Offset="1"/>
+    </LinearGradientBrush>
+  </UserControl.Resources>
+
+  <UserControl.Styles>
+    <!-- Enhanced Modern Button Styles with Gradients and Animations -->
+    <Style Selector="Button.accent">
+      <Setter Property="Background" Value="{StaticResource AccentGradient}"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="CornerRadius" Value="12"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="FontSize" Value="14"/>
+      <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+
+    <Style Selector="Button.accent:pointerover">
+      <Setter Property="Opacity" Value="0.9"/>
+    </Style>
+
+    <Style Selector="Button.accent:pressed">
+      <Setter Property="Opacity" Value="0.8"/>
+    </Style>
+
+    <Style Selector="Button.modern-button">
+      <Setter Property="Background" Value="{StaticResource PrimaryGradient}"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="CornerRadius" Value="12"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="FontSize" Value="14"/>
+      <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+
+    <Style Selector="Button.modern-button:pointerover">
+      <Setter Property="Opacity" Value="0.9"/>
+    </Style>
+
+    <Style Selector="Button.secondary">
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="Foreground" Value="#4A5568"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/>
+      <Setter Property="BorderThickness" Value="2"/>
+      <Setter Property="CornerRadius" Value="12"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="FontSize" Value="14"/>
+      <Setter Property="Cursor" Value="Hand"/>
+    </Style>
+
+    <Style Selector="Button.secondary:pointerover">
+      <Setter Property="Background" Value="#F7FAFC"/>
+      <Setter Property="BorderBrush" Value="#CBD5E0"/>
+    </Style>
+
+    <!-- Enhanced Card Styles with Shadows and Gradients -->
+    <Style Selector="Border.card">
+      <Setter Property="Background" Value="{StaticResource CardGradient}"/>
+      <Setter Property="CornerRadius" Value="16"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="Padding" Value="24"/>
+    </Style>
+
+    <Style Selector="Border.header-card">
+      <Setter Property="Background" Value="{StaticResource CardGradient}"/>
+      <Setter Property="CornerRadius" Value="16"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="Padding" Value="20"/>
+    </Style>
+
+    <!-- Enhanced TextBox Styles -->
+    <Style Selector="TextBox.modern">
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/>
+      <Setter Property="BorderThickness" Value="2"/>
+      <Setter Property="CornerRadius" Value="12"/>
+      <Setter Property="Padding" Value="16,12"/>
+      <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <Style Selector="TextBox.modern:focus">
+      <Setter Property="BorderBrush" Value="#667EEA"/>
+    </Style>
+
+    <!-- Enhanced ComboBox Styles -->
+    <Style Selector="ComboBox.modern">
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/>
+      <Setter Property="BorderThickness" Value="2"/>
+      <Setter Property="CornerRadius" Value="12"/>
+      <Setter Property="Padding" Value="16,12"/>
+      <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <!-- Enhanced Progress Bar -->
+    <Style Selector="ProgressBar.modern">
+      <Setter Property="Background" Value="#E2E8F0"/>
+      <Setter Property="Foreground" Value="{StaticResource SuccessGradient}"/>
+      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="Height" Value="8"/>
+    </Style>
+
+    <!-- File List Item Styles -->
+    <Style Selector="Border.file-item">
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="CornerRadius" Value="12"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="Padding" Value="16"/>
+      <Setter Property="Margin" Value="0,0,0,8"/>
+    </Style>
+
+    <Style Selector="Border.file-item:pointerover">
+      <Setter Property="BorderBrush" Value="#CBD5E0"/>
+      <Setter Property="Background" Value="#F7FAFC"/>
+    </Style>
+  </UserControl.Styles>
+
+  <!-- Main Background with Gradient -->
+  <Border Background="{StaticResource BackgroundGradient}">
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+
+    <!-- Header with Enhanced Styling -->
+    <Border Grid.Row="0" Classes="header-card" Margin="20,20,20,10">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <!-- App Title with Gradient Text Effect -->
+        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12">
+          <TextBlock Text="🎬" FontSize="32" VerticalAlignment="Center"/>
+          <StackPanel VerticalAlignment="Center">
+            <TextBlock Text="Pilgrims Media Converter" 
+                       FontSize="24" 
+                       FontWeight="Bold" 
+                       Foreground="#2D3748"/>
+            <TextBlock Text="Professional media conversion made simple" 
+                       FontSize="14" 
+                       Foreground="#718096"/>
+          </StackPanel>
+        </StackPanel>
+        
+        <!-- Action Buttons with Enhanced Styling -->
+        <StackPanel Grid.Column="1" 
+                    Orientation="Horizontal" 
+                    Spacing="12" 
+                    VerticalAlignment="Center">
+          <Button Content="🌙"
+                  Command="{Binding ToggleThemeCommand}"
+                  ToolTip.Tip="Toggle Theme"
+                  Classes="secondary"
+				  IsVisible="False"
+                  Padding="12,10"
+                  FontSize="16"/>
+          <Button Content="📁 Add Files" 
+                  Command="{Binding AddFilesCommand}"
+                  Classes="accent"
+                  Padding="20,12"/>
+          <Button Content="📺 Download YouTube"
+                  Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=OpenDialogCommand}"
+                  Classes="modern-button"
+                  Padding="20,12"
+                  ToolTip.Tip="Download from YouTube"
+                  Click="OnYouTubeButtonClick"/>
+          <Button Content="🗑️ Clear All" 
+                  Command="{Binding ClearAllCommand}"
+                  Classes="secondary"
+                  Padding="20,12"/>
+			<Button Content="Close"
+					Background="Red"
+                  Command="{Binding CloseCommand}"
+                  Classes="secondary"
+                  Padding="20,12"/>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <!-- Main Content with Enhanced Cards -->
+    <Grid Grid.Row="1" Margin="20,10,20,20">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="1.5*"/>
+        <ColumnDefinition Width="20"/>
+        <ColumnDefinition Width="1.5*"/>
+        <ColumnDefinition Width="20"/>
+        <ColumnDefinition Width="1*"/>
+      </Grid.ColumnDefinitions>
+
+      <!-- File List Section with Beautiful Card -->
+      <Border Grid.Column="0" Classes="card">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+          </Grid.RowDefinitions>
+
+          <!-- File List Header with Gradient -->
+          <Border Grid.Row="0" 
+                  Background="{StaticResource PrimaryGradient}"
+                  CornerRadius="12,12,0,0" 
+                  Padding="20,16">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              
+              <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="📁" FontSize="18" VerticalAlignment="Center"/>
+                <TextBlock Text="Media Files" 
+                           FontSize="16" 
+                           FontWeight="SemiBold" 
+                           Foreground="White" 
+                           VerticalAlignment="Center"/>
+              </StackPanel>
+              
+              <TextBlock Grid.Column="1" 
+                         Text="{Binding MediaFiles.Count, StringFormat=\{0\} files}" 
+                         FontSize="14" 
+                         Foreground="White" 
+                         VerticalAlignment="Center"
+                         Opacity="0.9"/>
+            </Grid>
+          </Border>
+
+          <!-- Drag Drop Area / File List with Enhanced Styling -->
+          <Border Grid.Row="1" 
+                  Name="DropArea"
+                  Background="White"
+                  MinHeight="300"
+                  CornerRadius="0,0,12,12"
+                  DoubleTapped="OnDropAreaDoubleTapped">
+            
+            <Grid>
+              <!-- Enhanced Empty State -->
+              <StackPanel IsVisible="{Binding !MediaFiles.Count}"
+                          HorizontalAlignment="Center" 
+                          VerticalAlignment="Center"
+                          Spacing="20">
+                <Border Background="{StaticResource AccentGradient}"
+                        Width="80" Height="80"
+                        CornerRadius="40"
+                        HorizontalAlignment="Center">
+                  <TextBlock Text="📁" FontSize="36" 
+                             HorizontalAlignment="Center" 
+                             VerticalAlignment="Center"
+                             Foreground="White"/>
+                </Border>
+                <TextBlock Text="Drag &amp; Drop media files here" 
+                           FontSize="20" 
+                           FontWeight="Medium"
+                           HorizontalAlignment="Center"
+                           Foreground="#2D3748"/>
+                <TextBlock Text="or click 'Add Files' to browse" 
+                           FontSize="16" 
+                           HorizontalAlignment="Center"
+                           Foreground="#718096"/>
+                <Border Background="#F7FAFC" 
+                        CornerRadius="8" 
+                        Padding="16,12"
+                        HorizontalAlignment="Center">
+                  <StackPanel Orientation="Horizontal" Spacing="8">
+                    <TextBlock Text="✨" FontSize="14"/>
+                    <TextBlock Text="Supported formats:" FontSize="14" FontWeight="Medium" Foreground="#4A5568"/>
+                    <TextBlock Text="MP4, AVI, MOV, MP3, WAV, FLAC, and more" 
+                               FontSize="14" 
+                               Foreground="#2B6CB0"/>
+                  </StackPanel>
+                </Border>
+              </StackPanel>
+
+              <!-- Enhanced File List -->
+              <ScrollViewer IsVisible="{Binding MediaFiles.Count}" Padding="16">
+                <ItemsControl ItemsSource="{Binding MediaFiles}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="models:MediaFile">
+                      <Border Classes="file-item" Margin="0,0,0,12">
+                        <Grid>
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                          </Grid.ColumnDefinitions>
+                          <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                          </Grid.RowDefinitions>
+
+                          <!-- File Icon -->
+                          <TextBlock Grid.Column="0" Grid.RowSpan="2"
+                                     Text="{Binding FileType, Converter={x:Static converters:FileTypeToIconConverter.Instance}}"
+                                     FontSize="24" 
+                                     VerticalAlignment="Center"
+                                     Margin="0,0,15,0"/>
+
+                          <!-- File Info -->
+                          <StackPanel Grid.Column="1" Grid.Row="0">
+                            <TextBlock Text="{Binding FileName}" 
+                                       FontWeight="Medium" 
+                                       FontSize="14"/>
+                            <StackPanel Orientation="Horizontal" Spacing="15" Margin="0,2,0,0">
+                              <TextBlock Text="{Binding FileSizeFormatted}" 
+                                         FontSize="12" 
+                                         Foreground="#718096"/>
+                              <TextBlock Text="{Binding Duration}" 
+                                         FontSize="12" 
+                                         Foreground="#718096"
+                                         IsVisible="{Binding Duration, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                              <TextBlock Text="{Binding Resolution}" 
+                                         FontSize="12" 
+                                         Foreground="#718096"
+                                         IsVisible="{Binding Resolution, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+                            </StackPanel>
+                          </StackPanel>
+
+                          <!-- Progress Bar -->
+                          <ProgressBar Grid.Column="1" Grid.Row="1"
+                                       Value="{Binding Progress}"
+                                       Margin="0,8,0,0"
+                                       Height="4"
+                                       IsVisible="{Binding Status, Converter={x:Static converters:ConversionStatusToBoolConverter.Instance}}"/>
+
+                          <!-- Status -->
+                          <Border Grid.Column="2" Grid.RowSpan="2" VerticalAlignment="Center" Margin="8,0">
+                            <TextBlock Text="{Binding Status}" FontSize="12" FontWeight="SemiBold"/>
+                          </Border>
+
+                          <!-- Remove Button -->
+                          <Button Grid.Column="3" Grid.RowSpan="2"
+                                  Content="✕"
+                                  Command="{Binding $parent[UserControl].DataContext.RemoveFileCommand}"
+                                  CommandParameter="{Binding}"
+                                  Classes="icon-button"
+                                  VerticalAlignment="Center"/>
+                        </Grid>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </ScrollViewer>
+            </Grid>
+          </Border>
+        </Grid>
+      </Border>
+
+      <!-- Video Preview Section with Beautiful Card -->
+      <Border Grid.Column="2" Classes="card">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+          </Grid.RowDefinitions>
+
+          <!-- Video Preview Header with Gradient -->
+          <Border Grid.Row="0" 
+                  Background="{StaticResource SecondaryGradient}"
+                  CornerRadius="12,12,0,0" 
+                  Padding="20,16">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <TextBlock Text="🎬" FontSize="18" VerticalAlignment="Center"/>
+              <TextBlock Text="Video Preview" 
+                         FontSize="16" 
+                         FontWeight="SemiBold" 
+                         Foreground="White" 
+                         VerticalAlignment="Center"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Video Preview Control with Enhanced Background -->
+          <Border Grid.Row="1" 
+                  Background="White"
+                  CornerRadius="0,0,12,12"
+                  Padding="16">
+            <Border Background="#F8FAFC" 
+                    CornerRadius="8" 
+                    BorderBrush="#E2E8F0" 
+                    BorderThickness="1">
+              <controls:VideoPreviewControl Name="VideoPreview"
+                                            IsVisible="{Binding SelectedMediaFile, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+            </Border>
+          </Border>
+        </Grid>
+      </Border>
+
+      <!-- Settings Panel with Beautiful Card -->
+      <Border Grid.Column="4" Classes="card">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+          </Grid.RowDefinitions>
+
+          <!-- Settings Header with Gradient -->
+          <Border Grid.Row="0" 
+                  Background="{StaticResource AccentGradient}"
+                  CornerRadius="12,12,0,0" 
+                  Padding="20,16">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <TextBlock Text="⚙️" FontSize="18" VerticalAlignment="Center"/>
+              <TextBlock Text="Conversion Settings" 
+                         FontSize="16" 
+                         FontWeight="SemiBold" 
+                         Foreground="White" 
+                         VerticalAlignment="Center"/>
+            </StackPanel>
+          </Border>
+
+          <!-- Settings Content -->
+          <Border Grid.Row="1" 
+                  Background="White"
+                  CornerRadius="0,0,12,12"
+                  Padding="20">
+            <ScrollViewer>
+              <StackPanel Spacing="24">
+                
+                <!-- Output Settings Section -->
+                <StackPanel Spacing="16">
+                  <Border Background="{StaticResource LightGradient}" 
+                          CornerRadius="8" 
+                          Padding="16,12">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                      <TextBlock Text="📤" FontSize="16" VerticalAlignment="Center"/>
+                      <TextBlock Text="Output Settings" 
+                                 FontWeight="SemiBold" 
+                                 FontSize="16"
+                                 Foreground="#2D3748"
+                                 VerticalAlignment="Center"/>
+                    </StackPanel>
+                  </Border>
+                  
+                  <StackPanel Spacing="12">
+                    <TextBlock Text="Format" FontSize="14" FontWeight="Medium" Foreground="#4A5568"/>
+                    <ComboBox SelectedItem="{Binding ConversionSettings.OutputFormat}"
+                              ItemsSource="{Binding OutputFormats}"
+                              Classes="modern"
+                              HorizontalAlignment="Stretch"/>
+                  </StackPanel>
+
+                  <StackPanel Spacing="12">
+                    <TextBlock Text="Output Directory" FontSize="14" FontWeight="Medium" Foreground="#4A5568"/>
+                    <Grid>
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                      </Grid.ColumnDefinitions>
+                      <TextBox Grid.Column="0" 
+                               Text="{Binding ConversionSettings.OutputDirectory}"
+                               Classes="modern"
+                               IsReadOnly="True"/>
+                      <Button Grid.Column="1" 
+                              Content="📁"
+                              Command="{Binding SelectOutputDirectoryCommand}"
+                              Classes="icon-button"
+                              Margin="8,0,0,0"/>
+                    </Grid>
+                  </StackPanel>
+                </StackPanel>
+
+                <!-- Quality Settings Section -->
+                <StackPanel Spacing="16">
+                  <Border Background="{StaticResource LightGradient}" 
+                          CornerRadius="8" 
+                          Padding="16,12">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                      <TextBlock Text="🎯" FontSize="16" VerticalAlignment="Center"/>
+                      <TextBlock Text="Quality Settings" 
+                                 FontWeight="SemiBold" 
+                                 FontSize="16"
+                                 Foreground="#2D3748"
+                                 VerticalAlignment="Center"/>
+                    </StackPanel>
+                  </Border>
+                  
+                  <StackPanel Spacing="12">
+                    <TextBlock Text="Video Quality" FontSize="14" FontWeight="Medium" Foreground="#4A5568"/>
+                    <ComboBox x:Name="cboVideoQuality"
+					SelectedItem="{Binding ConversionSettings.VideoQuality, 
+					Converter={StaticResource VideoQualityConverter}
+					ConverterParameter={Binding RelativeSource={RelativeSource AncestorType=ComboBox}}}"
+                          HorizontalAlignment="Stretch">
+                  <ComboBoxItem Content="Low"/>
+                  <ComboBoxItem Content="Medium"/>
+                  <ComboBoxItem Content="High"/>
+                  <ComboBoxItem Content="Very High"/>
+                </ComboBox>
+              </StackPanel>
+
+              <StackPanel Spacing="8">
+                <TextBlock Text="Audio Quality" FontSize="14" FontWeight="Medium"/>
+                <ComboBox x:Name="cboAudioQuality"
+						  SelectedItem="{Binding ConversionSettings.AudioQuality,
+						  Converter={StaticResource AudioQualityConverter}, 
+						  ConverterParameter={Binding RelativeSource={RelativeSource AncestorType=ComboBox}}}"
+                          HorizontalAlignment="Stretch">
+                  <ComboBoxItem Content="Low"/>
+                  <ComboBoxItem Content="Medium"/>
+                  <ComboBoxItem Content="High"/>
+                  <ComboBoxItem Content="Very High"/>
+                </ComboBox>
+              </StackPanel>
+
+              <StackPanel Spacing="8">
+                <TextBlock Text="Resolution" FontSize="14" FontWeight="Medium"/>
+                <ComboBox SelectedItem="{Binding ConversionSettings.Resolution}"
+                          HorizontalAlignment="Stretch">
+                  <ComboBoxItem Content="Original"/>
+                  <ComboBoxItem Content="3840x2160"/>
+                  <ComboBoxItem Content="1920x1080"/>
+                  <ComboBoxItem Content="1280x720"/>
+                  <ComboBoxItem Content="854x480"/>
+                  <ComboBoxItem Content="640x360"/>
+                </ComboBox>
+              </StackPanel>
+            </StackPanel>
+
+            <!-- Advanced Options -->
+            <Expander Header="Advanced Options" IsExpanded="False">
+              <StackPanel Spacing="12" Margin="0,10,0,0">
+                
+                <CheckBox Content="Enable Cropping" 
+                          IsChecked="{Binding ConversionSettings.EnableCropping}"/>
+                
+                <StackPanel Spacing="8" 
+                            IsVisible="{Binding ConversionSettings.EnableCropping}">
+                  <TextBlock Text="Crop Settings" FontSize="14" FontWeight="Medium"/>
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                      <RowDefinition Height="Auto"/>
+                      <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                    <NumericUpDown Grid.Column="0" Grid.Row="0" 
+                                   Value="{Binding ConversionSettings.CropX}"
+                                   Watermark="X" Margin="0,0,5,5"/>
+                    <NumericUpDown Grid.Column="1" Grid.Row="0" 
+                                   Value="{Binding ConversionSettings.CropY}"
+                                   Watermark="Y" Margin="5,0,0,5"/>
+                    <NumericUpDown Grid.Column="0" Grid.Row="1" 
+                                   Value="{Binding ConversionSettings.CropWidth}"
+                                   Watermark="Width" Margin="0,5,5,0"/>
+                    <NumericUpDown Grid.Column="1" Grid.Row="1" 
+                                   Value="{Binding ConversionSettings.CropHeight}"
+                                   Watermark="Height" Margin="5,5,0,0"/>
+                  </Grid>
+                </StackPanel>
+
+                <StackPanel Spacing="8">
+                  <TextBlock Text="Trim Video" FontSize="14" FontWeight="Medium"/>
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <NumericUpDown Grid.Column="0" 
+                                   Value="{Binding ConversionSettings.StartTime}"
+                                   Watermark="Start (sec)" Margin="0,0,5,0"/>
+                    <NumericUpDown Grid.Column="1" 
+                                   Value="{Binding ConversionSettings.EndTime}"
+                                   Watermark="End (sec)" Margin="5,0,0,0"/>
+                  </Grid>
+                </StackPanel>
+              </StackPanel>
+            </Expander>
+
+            <!-- Action Buttons -->
+            <StackPanel Spacing="10">
+              <Button Content="🔄 Start Conversion" 
+                      Command="{Binding StartConversionCommand}"
+                      Classes="accent"
+                      HorizontalAlignment="Stretch"
+                      Padding="0,12"
+                      FontWeight="Medium"/>
+              
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" 
+                        Content="Split" 
+                        Command="{Binding SplitFileCommand}"
+                        CommandParameter="{Binding SelectedMediaFile}"
+                        Classes="secondary"
+                        Margin="0,0,5,0"/>
+                <Button Grid.Column="1" 
+                        Content="Join" 
+                        Command="{Binding JoinFilesCommand}"
+                        Classes="secondary"
+                        Margin="5,0,0,0"/>
+              </Grid>
+            </StackPanel>
+          </StackPanel>
+        </ScrollViewer>
+      </Border>
+    </Grid>
+  </Border>
+    </Grid>
+
+    <!-- Progress Section -->
+    <Border Grid.Row="3" 
+            Background="#F7FAFC" 
+            Padding="20,15"
+            IsVisible="{Binding IsProcessing}">
+      <StackPanel Spacing="8">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBlock Grid.Column="0" 
+                     Text="Overall Progress" 
+                     FontWeight="Medium"/>
+          <TextBlock Grid.Column="1" 
+                     Text="{Binding OverallProgress, StringFormat=P1}"/>
+        </Grid>
+        <ProgressBar Value="{Binding OverallProgress}" 
+                     Height="8" 
+                     CornerRadius="4"/>
+      </StackPanel>
+    </Border>
+
+    <!-- Status Bar -->
+    <Border Grid.Row="4" 
+            Background="#2D3748" 
+            Padding="20,10">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock Grid.Column="0" 
+                   Text="{Binding StatusMessage}" 
+                   Foreground="White" 
+                   VerticalAlignment="Center"/>
+        
+        <StackPanel Grid.Column="1" 
+                    Orientation="Horizontal" 
+                    Spacing="10">
+          <TextBlock Text="Ready" 
+                     Foreground="#68D391" 
+                     VerticalAlignment="Center"
+                     IsVisible="{Binding !IsProcessing}"/>
+          <TextBlock Text="Processing..." 
+                     Foreground="#F6AD55" 
+                     VerticalAlignment="Center"
+                     IsVisible="{Binding IsProcessing}"/>
+        </StackPanel>
+      </Grid>
+    </Border>
+    </Grid>
+  </Border>
+</UserControl>

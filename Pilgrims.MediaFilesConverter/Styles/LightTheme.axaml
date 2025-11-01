@@ -1,0 +1,84 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- Light Theme Colors - Sky Blue Palette -->
+    <Style>
+        <Style.Resources>
+            <!-- Primary Colors -->
+            <SolidColorBrush x:Key="PrimaryBrush">#0EA5E9</SolidColorBrush>
+            <SolidColorBrush x:Key="PrimaryHoverBrush">#0284C7</SolidColorBrush>
+            <SolidColorBrush x:Key="PrimaryPressedBrush">#0369A1</SolidColorBrush>
+            
+            <!-- Background Colors -->
+            <SolidColorBrush x:Key="BackgroundBrush">#F8FAFC</SolidColorBrush>
+            <SolidColorBrush x:Key="SurfaceBrush">#FFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="CardBrush">#FFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="HeaderBrush">#E0F2FE</SolidColorBrush>
+            
+            <!-- Text Colors -->
+            <SolidColorBrush x:Key="TextPrimaryBrush">#1E293B</SolidColorBrush>
+            <SolidColorBrush x:Key="TextSecondaryBrush">#64748B</SolidColorBrush>
+            <SolidColorBrush x:Key="TextMutedBrush">#94A3B8</SolidColorBrush>
+            <SolidColorBrush x:Key="TextOnPrimaryBrush">#FFFFFF</SolidColorBrush>
+            
+            <!-- Border Colors -->
+            <SolidColorBrush x:Key="BorderBrush">#E2E8F0</SolidColorBrush>
+            <SolidColorBrush x:Key="BorderHoverBrush">#CBD5E1</SolidColorBrush>
+            
+            <!-- Status Colors -->
+            <SolidColorBrush x:Key="SuccessBrush">#10B981</SolidColorBrush>
+            <SolidColorBrush x:Key="WarningBrush">#F59E0B</SolidColorBrush>
+            <SolidColorBrush x:Key="ErrorBrush">#EF4444</SolidColorBrush>
+            <SolidColorBrush x:Key="InfoBrush">#3B82F6</SolidColorBrush>
+        </Style.Resources>
+    </Style>
+
+    <!-- Window Background -->
+    <Style Selector="Window">
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+    </Style>
+
+    <!-- UserControl Background -->
+    <Style Selector="UserControl">
+        <Setter Property="Background" Value="{DynamicResource BackgroundBrush}"/>
+    </Style>
+
+    <!-- Button Styles -->
+    <Style Selector="Button.accent">
+        <Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextOnPrimaryBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush}"/>
+    </Style>
+
+    <Style Selector="Button.accent:pointerover /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PrimaryHoverBrush}"/>
+    </Style>
+
+    <Style Selector="Button.accent:pressed /template/ ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource PrimaryPressedBrush}"/>
+    </Style>
+
+    <!-- Card Styles -->
+    <Style Selector="Border.card">
+        <Setter Property="Background" Value="{DynamicResource CardBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+    </Style>
+
+    <!-- Header Styles -->
+    <Style Selector="Border.header">
+        <Setter Property="Background" Value="{DynamicResource HeaderBrush}"/>
+    </Style>
+
+    <!-- Text Styles -->
+    <Style Selector="TextBlock.primary">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    </Style>
+
+    <Style Selector="TextBlock.secondary">
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+    </Style>
+
+    <Style Selector="TextBlock.muted">
+        <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
+    </Style>
+</Styles>

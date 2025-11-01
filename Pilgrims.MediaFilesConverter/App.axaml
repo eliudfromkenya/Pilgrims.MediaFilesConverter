@@ -1,0 +1,14 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Pilgrims.MediaFilesConverter.App"
+			 xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.Styles>
+        <FluentTheme />
+        <StyleInclude Source="/Styles/LightTheme.axaml" />
+        <StyleInclude Source="/Styles/AppStyles.axaml" />
+		<dialogHostAvalonia:DialogHostStyles />
+    </Application.Styles>
+</Application>

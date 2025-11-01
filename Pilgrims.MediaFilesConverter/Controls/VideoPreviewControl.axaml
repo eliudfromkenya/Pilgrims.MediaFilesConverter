@@ -1,0 +1,143 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Pilgrims.MediaFilesConverter.ViewModels"
+             xmlns:converters="using:Pilgrims.MediaFilesConverter.Converters"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="Pilgrims.MediaFilesConverter.Controls.VideoPreviewControl"
+             x:DataType="vm:VideoPreviewViewModel">
+
+  <UserControl.Resources>
+    <converters:BoolToPlayPauseConverter x:Key="BoolToPlayPauseConverter"/>
+  </UserControl.Resources>
+
+  <Grid RowDefinitions="*,Auto,Auto">
+    <!-- Video Display Area -->
+    <Border Grid.Row="0" 
+            Background="Black" 
+            CornerRadius="8" 
+            Margin="10"
+            ClipToBounds="True">
+      <Grid>
+        <!-- Video placeholder (in real implementation, this would be a video player) -->
+        <Rectangle Fill="DarkGray" />
+        <TextBlock Text="Video Preview Area" 
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Center"
+                   Foreground="White"
+                   FontSize="16"/>
+        
+        <!-- Crop overlay (visible only in crop mode) -->
+        <Canvas IsVisible="{Binding IsCropMode}">
+          <Border Background="Transparent"
+                  BorderBrush="Red"
+                  BorderThickness="2"
+                  Width="{Binding CropWidth}"
+                  Height="{Binding CropHeight}"
+                  Canvas.Left="{Binding CropX}"
+                  Canvas.Top="{Binding CropY}">
+            <!-- Resize handles -->
+            <Grid>
+              <Ellipse Width="8" Height="8" Fill="Red" 
+                       HorizontalAlignment="Right" 
+                       VerticalAlignment="Bottom"
+                       Margin="0,0,-4,-4"/>
+            </Grid>
+          </Border>
+        </Canvas>
+      </Grid>
+    </Border>
+
+    <!-- Timeline and Controls -->
+    <StackPanel Grid.Row="1" Margin="10,0">
+      <!-- Timeline -->
+      <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,10">
+        <TextBlock Grid.Column="0" 
+                   Text="{Binding CurrentTime, StringFormat='{}{0:mm\\:ss}'}"
+                   VerticalAlignment="Center"
+                   Margin="0,0,10,0"/>
+        
+        <Slider Grid.Column="1"
+                Minimum="0"
+                Maximum="{Binding TotalDurationSeconds}"
+                Value="{Binding CurrentTimeSeconds}"
+                TickFrequency="1"
+                IsSnapToTickEnabled="False"/>
+        
+        <TextBlock Grid.Column="2" 
+                   Text="{Binding TotalDuration, StringFormat='{}{0:mm\\:ss}'}"
+                   VerticalAlignment="Center"
+                   Margin="10,0,0,0"/>
+      </Grid>
+
+      <!-- Time markers for join/split mode -->
+      <Grid ColumnDefinitions="*,Auto,*" 
+            IsVisible="{Binding IsJoinSplitMode}"
+            Margin="0,0,0,10">
+        <StackPanel Grid.Column="0" Orientation="Horizontal">
+          <TextBlock Text="Start: " VerticalAlignment="Center"/>
+          <TextBlock Text="{Binding StartTime, StringFormat='{}{0:mm\\:ss}'}" 
+                     VerticalAlignment="Center"
+                     FontWeight="Bold"/>
+          <Button Content="Set" 
+                  Command="{Binding SetStartTimeCommand}"
+                  Margin="5,0,0,0"
+                  Padding="8,2"/>
+        </StackPanel>
+        
+        <Rectangle Grid.Column="1" Width="1" Fill="Gray" Margin="10,0"/>
+        
+        <StackPanel Grid.Column="2" Orientation="Horizontal">
+          <TextBlock Text="End: " VerticalAlignment="Center"/>
+          <TextBlock Text="{Binding EndTime, StringFormat='{}{0:mm\\:ss}'}" 
+                     VerticalAlignment="Center"
+                     FontWeight="Bold"/>
+          <Button Content="Set" 
+                  Command="{Binding SetEndTimeCommand}"
+                  Margin="5,0,0,0"
+                  Padding="8,2"/>
+        </StackPanel>
+      </Grid>
+    </StackPanel>
+
+    <!-- Control Buttons -->
+    <StackPanel Grid.Row="2" 
+                Orientation="Horizontal" 
+                HorizontalAlignment="Center"
+                Margin="10">
+      
+      <!-- Playback Controls -->
+      <Button Content="{Binding IsPlaying, Converter={StaticResource BoolToPlayPauseConverter}}"
+              Command="{Binding PlayPauseCommand}"
+              Width="40" Height="40"
+              FontSize="16"
+              Margin="5"/>
+      
+      <Button Content="⏮"
+              Command="{Binding SeekToStartCommand}"
+              Width="40" Height="40"
+              FontSize="16"
+              Margin="5"/>
+      
+      <Button Content="⏭"
+              Command="{Binding SeekToEndCommand}"
+              Width="40" Height="40"
+              FontSize="16"
+              Margin="5"/>
+
+      <!-- Mode Toggle Buttons -->
+      <Rectangle Width="1" Fill="Gray" Margin="10,5"/>
+      
+      <ToggleButton Content="✂ Crop"
+                    IsChecked="{Binding IsCropMode}"
+                    Margin="5"
+                    Padding="10,5"/>
+      
+      <ToggleButton Content="⚡ Join/Split"
+                    IsChecked="{Binding IsJoinSplitMode}"
+                    Margin="5"
+                    Padding="10,5"/>
+    </StackPanel>
+  </Grid>
+</UserControl>

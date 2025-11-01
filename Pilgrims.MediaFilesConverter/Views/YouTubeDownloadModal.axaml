@@ -1,0 +1,410 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Pilgrims.MediaFilesConverter.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+             x:Class="Pilgrims.MediaFilesConverter.Views.YouTubeDownloadModal"
+			 xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+             x:DataType="vm:YouTubeDownloadViewModel">
+
+  <UserControl.Resources>
+    <!-- Beautiful Gradients -->
+    <LinearGradientBrush x:Key="YouTubeGradient" StartPoint="0,0" EndPoint="1,1">
+      <GradientStop Color="#FF0000" Offset="0"/>
+      <GradientStop Color="#CC0000" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="SuccessGradient" StartPoint="0,0" EndPoint="1,1">
+      <GradientStop Color="#48BB78" Offset="0"/>
+      <GradientStop Color="#38A169" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="PrimaryGradient" StartPoint="0,0" EndPoint="1,1">
+      <GradientStop Color="#667EEA" Offset="0"/>
+      <GradientStop Color="#764BA2" Offset="1"/>
+    </LinearGradientBrush>
+    
+    <LinearGradientBrush x:Key="LightGradient" StartPoint="0,0" EndPoint="1,1">
+      <GradientStop Color="#F7FAFC" Offset="0"/>
+      <GradientStop Color="#EDF2F7" Offset="1"/>
+    </LinearGradientBrush>
+  </UserControl.Resources>
+
+  <UserControl.Styles>
+    <!-- Enhanced Modal Overlay Style -->
+    <Style Selector="Border.modal-overlay">
+      <Setter Property="Background" Value="#90000000"/>
+      <Setter Property="HorizontalAlignment" Value="Stretch"/>
+      <Setter Property="VerticalAlignment" Value="Stretch"/>
+    </Style>
+
+    <!-- Enhanced Modal Content Style -->
+    <Style Selector="Border.modal-content">
+      <Setter Property="Background" Value="White"/>
+      <Setter Property="CornerRadius" Value="20"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="Padding" Value="0"/>
+      <Setter Property="MaxWidth" Value="650"/>
+      <Setter Property="MaxHeight" Value="750"/>
+      <Setter Property="HorizontalAlignment" Value="Center"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+
+    <!-- YouTube Button Style -->
+    <Style Selector="Button.youtube">
+      <Setter Property="Background" Value="{StaticResource YouTubeGradient}"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="CornerRadius" Value="12"/>
+      <Setter Property="Padding" Value="24,14"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="FontSize" Value="16"/>
+    </Style>
+
+    <Style Selector="Button.youtube:pointerover">
+      <Setter Property="Opacity" Value="0.9"/>
+    </Style>
+
+    <!-- Modern Button Style -->
+    <Style Selector="Button.modern">
+      <Setter Property="Background" Value="{StaticResource PrimaryGradient}"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="CornerRadius" Value="12"/>
+      <Setter Property="Padding" Value="20,12"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+
+    <Style Selector="Button.modern:pointerover">
+      <Setter Property="Opacity" Value="0.9"/>
+    </Style>
+
+    <!-- Secondary Button Style -->
+    <Style Selector="Button.secondary">
+      <Setter Property="Background" Value="{StaticResource LightGradient}"/>
+      <Setter Property="Foreground" Value="#4A5568"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/>
+      <Setter Property="BorderThickness" Value="2"/>
+      <Setter Property="CornerRadius" Value="12"/>
+      <Setter Property="Padding" Value="16,12"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+
+    <Style Selector="Button.secondary:pointerover">
+      <Setter Property="Background" Value="#EDF2F7"/>
+      <Setter Property="BorderBrush" Value="#CBD5E0"/>
+    </Style>
+
+    <!-- Modern TextBox Style -->
+    <Style Selector="TextBox.modern">
+      <Setter Property="Background" Value="#F7FAFC"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/>
+      <Setter Property="BorderThickness" Value="2"/>
+      <Setter Property="CornerRadius" Value="12"/>
+      <Setter Property="Padding" Value="16,12"/>
+      <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <Style Selector="TextBox.modern:focus">
+      <Setter Property="BorderBrush" Value="#667EEA"/>
+    </Style>
+
+    <!-- Modern ComboBox Style -->
+    <Style Selector="ComboBox.modern">
+      <Setter Property="Background" Value="#F7FAFC"/>
+      <Setter Property="BorderBrush" Value="#E2E8F0"/>
+      <Setter Property="BorderThickness" Value="2"/>
+      <Setter Property="CornerRadius" Value="12"/>
+      <Setter Property="Padding" Value="16,12"/>
+      <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <!-- Progress Bar Style -->
+    <Style Selector="ProgressBar.modern">
+      <Setter Property="Background" Value="#E2E8F0"/>
+      <Setter Property="Foreground" Value="#667EEA"/>
+      <Setter Property="CornerRadius" Value="8"/>
+      <Setter Property="Height" Value="8"/>
+    </Style>
+  </UserControl.Styles>
+
+  <!-- Enhanced Modal Overlay -->
+  <Border Classes="modal-overlay"
+          PointerPressed="OnOverlayPressed"
+          IsVisible="{Binding IsModalOpen}">
+    
+    <Grid>
+      <!-- Enhanced Modal Content -->
+      <Border Classes="modal-content"
+              IsVisible="{Binding IsModalOpen}"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Center">
+        
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+          </Grid.RowDefinitions>
+
+          <!-- Beautiful Header with Gradient -->
+          <Border Grid.Row="0" 
+                  Background="{StaticResource YouTubeGradient}"
+                  CornerRadius="20,20,0,0"
+                  Padding="32,24">
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              
+              <StackPanel Grid.Column="0" Spacing="8">
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                  <Border Background="White" 
+                          CornerRadius="12" 
+                          Padding="8"
+                          VerticalAlignment="Center">
+                    <TextBlock Text="📺" FontSize="20"/>
+                  </Border>
+                  <TextBlock Text="YouTube Downloader" 
+                             FontSize="28" 
+                             FontWeight="Bold" 
+                             Foreground="White"
+                             VerticalAlignment="Center"/>
+                </StackPanel>
+                <TextBlock Text="Download high-quality videos and audio from YouTube with ease" 
+                           FontSize="16" 
+                           Foreground="White"
+                           Opacity="0.9"/>
+              </StackPanel>
+              
+              <Button Grid.Column="1" 
+                      Content="✕"
+                      Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}"
+                      Background="White"
+                      Foreground="#FF0000"
+                      BorderThickness="0"
+                      FontSize="18"
+                      FontWeight="Bold"
+                      CornerRadius="20"
+                      Width="40" Height="40"
+                      HorizontalContentAlignment="Center"
+                      VerticalContentAlignment="Center"
+                      ToolTip.Tip="Close"/>
+            </Grid>
+          </Border>
+
+          <!-- Modal Content Body -->
+          <Border Grid.Row="1" 
+                  Background="White"
+                  CornerRadius="0,0,20,20"
+                  Padding="32">
+            <ScrollViewer>
+              <StackPanel Spacing="28">
+
+                <!-- Enhanced URL Input Section -->
+                <StackPanel Spacing="16">
+                  <Border Background="{StaticResource LightGradient}" 
+                          CornerRadius="12" 
+                          Padding="20,16">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                      <Border Background="{StaticResource YouTubeGradient}" 
+                              CornerRadius="8" 
+                              Padding="8"
+                              VerticalAlignment="Center">
+                        <TextBlock Text="🔗" FontSize="16" Foreground="White"/>
+                      </Border>
+                      <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="YouTube URL" 
+                                   FontWeight="SemiBold" 
+                                   FontSize="18" 
+                                   Foreground="#2D3748"/>
+                        <TextBlock Text="Paste your YouTube video link below" 
+                                   FontSize="14" 
+                                   Foreground="#718096"/>
+                      </StackPanel>
+                    </StackPanel>
+                  </Border>
+                  
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBox Grid.Column="0"
+                             Text="{Binding YouTubeUrl}" 
+                             Classes="modern"
+                             Watermark="https://www.youtube.com/watch?v=..."
+                             FontSize="15"
+                             Padding="16,14"/>
+                    
+                    <Button Grid.Column="1"
+                            Content="🔍 Analyze" 
+                            Command="{Binding GetVideoInfoCommand}"
+                            Classes="youtube"
+                            Margin="12,0,0,0"
+                            VerticalAlignment="Stretch"/>
+                  </Grid>
+                </StackPanel>
+
+                <!-- Enhanced Video Information Display --><!--
+                <Border Background="#F0FFF4" 
+                        BorderBrush="#68D391" 
+                        BorderThickness="2" 
+                        CornerRadius="16" 
+                        Padding="24"
+                        IsVisible="{Binding VideoInfo, Converter={x:Static ObjectConverters.IsNotNull}}">
+                  
+                  <StackPanel Spacing="16">
+                    <Border Background="{StaticResource SuccessGradient}" 
+                            CornerRadius="8" 
+                            Padding="12,8"
+                            HorizontalAlignment="Left">
+                      <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="✅" FontSize="16" VerticalAlignment="Center"/>
+                        <TextBlock Text="Video Found!" 
+                                   FontWeight="SemiBold" 
+                                   FontSize="16" 
+                                   Foreground="White"
+                                   VerticalAlignment="Center"/>
+                      </StackPanel>
+                    </Border>
+                    
+                    <TextBlock Text="{Binding VideoInfo.Title}" 
+                               FontWeight="SemiBold" 
+                               FontSize="18" 
+                               Foreground="#2D3748" 
+                               TextWrapping="Wrap"/>
+                    
+                    <Grid>
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                      </Grid.ColumnDefinitions>
+                      
+                      <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="⏱️" FontSize="14" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding VideoInfo.Duration, StringFormat='Duration: {0}'}" 
+                                   FontSize="14" 
+                                   FontWeight="Medium"
+                                   Foreground="#4A5568"
+                                   VerticalAlignment="Center"/>
+                      </StackPanel>
+                      
+                      <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="👁️" FontSize="14" VerticalAlignment="Center"/>
+                        <TextBlock
+                             Text="{Binding VideoInfo.ViewCount, StringFormat='Views: {0:N0}'}" 
+                             FontSize="12" 
+                             Foreground="#4A5568"/>
+                      </StackPanel>
+                </Grid>
+              </StackPanel>
+            </Border>-->
+
+            <!-- Download Options -->
+            <StackPanel Spacing="16" 
+                        IsVisible="{Binding VideoInfo, Converter={x:Static ObjectConverters.IsNotNull}}">
+              
+              <TextBlock Text="Download Options" 
+                         FontWeight="SemiBold" 
+                         FontSize="16" 
+                         Foreground="#2D3748"/>
+
+              <!-- Download Type Selection -->
+              <StackPanel Spacing="8">
+                <TextBlock Text="Download Type" 
+                           FontWeight="Medium" 
+                           FontSize="14" 
+                           Foreground="#4A5568"/>
+                
+                <ComboBox SelectedItem="{Binding SelectedDownloadType}"
+                          ItemsSource="{Binding DownloadTypes}"
+                          Classes="modern"
+                          HorizontalAlignment="Stretch"/>
+              </StackPanel>
+
+              <!-- Format and Quality Selection -->
+              <Grid>
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="16"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Spacing="8">
+                  <TextBlock Text="{Binding FormatLabel}" 
+                             FontWeight="Medium" 
+                             FontSize="14" 
+                             Foreground="#4A5568"/>
+                  
+                  <ComboBox SelectedItem="{Binding SelectedFormat}"
+                            ItemsSource="{Binding AvailableFormats}"
+                            Classes="modern"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Spacing="8">
+                  <TextBlock Text="{Binding QualityLabel}" 
+                             FontWeight="Medium" 
+                             FontSize="14" 
+                             Foreground="#4A5568"/>
+                  
+                  <ComboBox SelectedItem="{Binding SelectedQuality}"
+                            ItemsSource="{Binding AvailableQualities}"
+                            Classes="modern"/>
+                </StackPanel>
+              </Grid>
+            </StackPanel>
+
+            <!-- Progress Section -->
+            <StackPanel Spacing="12" 
+                        IsVisible="{Binding IsProcessing}">
+              
+              <TextBlock Text="Download Progress" 
+                         FontWeight="SemiBold" 
+                         FontSize="16" 
+                         Foreground="#2D3748"/>
+              
+              <ProgressBar Value="{Binding DownloadProgress}" 
+                           Classes="modern"
+                           Minimum="0" 
+                           Maximum="100"/>
+              
+              <TextBlock Text="{Binding StatusMessage}" 
+                         FontSize="14" 
+                         Foreground="#4A5568" 
+                         TextAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Action Buttons -->
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="16"/>
+                <ColumnDefinition Width="*"/>
+              </Grid.ColumnDefinitions>
+
+              <Button Grid.Column="0" 
+                      Content="Cancel" 
+                      Command="{Binding CloseModalCommand}"
+                      Classes="secondary"
+                      HorizontalAlignment="Stretch"/>
+
+              <Button Grid.Column="2" 
+                      Content="Download" 
+                      Command="{Binding DownloadVideoCommand}"
+                      Classes="modern"
+                      HorizontalAlignment="Stretch"
+                      IsEnabled="{Binding !IsProcessing}"/>
+            </Grid>
+
+          </StackPanel>
+        </ScrollViewer>
+      </Border>
+    </Grid>
+  </Border>
+  </Grid>
+  </Border>
+</UserControl>
