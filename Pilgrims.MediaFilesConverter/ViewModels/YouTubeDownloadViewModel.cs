@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using ReactiveUI;
 using Pilgrims.MediaFilesConverter.Models;
@@ -13,9 +14,9 @@ namespace Pilgrims.MediaFilesConverter.ViewModels
         private readonly YouTubeDownloadService _youtubeService;
         private string _youtubeUrl = string.Empty;
         private string _videoInfo = string.Empty;
+        private string _statusMessage = "Ready";
         private bool _isProcessing;
         private double _downloadProgress;
-        private string _statusMessage = "Ready";
         private string _selectedDownloadType = "Video";
         private string _selectedFormat = "mp4";
         private string _selectedQuality = "720p";
@@ -25,6 +26,9 @@ namespace Pilgrims.MediaFilesConverter.ViewModels
         private string _formatLabel = "Format:";
         private string _qualityLabel = "Quality:";
         private bool _isModalOpen;
+        private bool _isYtDlpAvailable;
+        private string _ytDlpStatusMessage = string.Empty;
+        private bool _showYtDlpDownloadButton;
 
         public YouTubeDownloadViewModel()
         {
@@ -44,9 +48,13 @@ namespace Pilgrims.MediaFilesConverter.ViewModels
                 this.WhenAnyValue(x => x.YouTubeUrl, x => x.IsProcessing, 
                     (url, processing) => !string.IsNullOrWhiteSpace(url) && _youtubeService.IsValidYouTubeUrl(url) && !processing));
             
-           // OpenModalCommand = ReactiveCommand.Create(OpenModal);
             CloseModalCommand = ReactiveCommand.Create(CloseModal);
+            OpenModalCommand = ReactiveCommand.Create(OpenModal);
+            DownloadYtDlpCommand = ReactiveCommand.CreateFromTask(DownloadYtDlpAsync);
             IsModalOpen = true;
+
+            // Check yt-dlp availability on initialization
+            _ = CheckYtDlpAvailabilityAsync();
         }
 
         // Properties
@@ -141,8 +149,27 @@ namespace Pilgrims.MediaFilesConverter.ViewModels
         // Commands
         public ReactiveCommand<Unit, Unit> GetVideoInfoCommand { get; }
         public ReactiveCommand<Unit, Unit> DownloadVideoCommand { get; }
-        public ReactiveCommand<Unit, Unit> OpenModalCommand { get; }
         public ReactiveCommand<Unit, Unit> CloseModalCommand { get; }
+        public ReactiveCommand<Unit, Unit> OpenModalCommand { get; }
+        public ReactiveCommand<Unit, Unit> DownloadYtDlpCommand { get; }
+
+        public bool IsYtDlpAvailable
+        {
+            get => _isYtDlpAvailable;
+            set => this.RaiseAndSetIfChanged(ref _isYtDlpAvailable, value);
+        }
+
+        public string YtDlpStatusMessage
+        {
+            get => _ytDlpStatusMessage;
+            set => this.RaiseAndSetIfChanged(ref _ytDlpStatusMessage, value);
+        }
+
+        public bool ShowYtDlpDownloadButton
+        {
+            get => _showYtDlpDownloadButton;
+            set => this.RaiseAndSetIfChanged(ref _showYtDlpDownloadButton, value);
+        }
 
         // Events
         public event Action<MediaFile>? FileDownloaded;
@@ -249,6 +276,68 @@ namespace Pilgrims.MediaFilesConverter.ViewModels
         private void CloseModal()
         {
             IsModalOpen = false;
+        }
+
+        private async Task CheckYtDlpAvailabilityAsync()
+        {
+            try
+            {
+                var availabilityResult = await _youtubeService.GetYtDlpAvailabilityAsync();
+                
+                IsYtDlpAvailable = availabilityResult.IsAvailable;
+                
+                if (availabilityResult.IsAvailable)
+                {
+                    YtDlpStatusMessage = $"yt-dlp {availabilityResult.Version} is available";
+                    ShowYtDlpDownloadButton = false;
+                }
+                else
+                {
+                    YtDlpStatusMessage = $"yt-dlp not available: {availabilityResult.ErrorMessage}";
+                    ShowYtDlpDownloadButton = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                IsYtDlpAvailable = false;
+                YtDlpStatusMessage = $"Error checking yt-dlp: {ex.Message}";
+                ShowYtDlpDownloadButton = true;
+            }
+        }
+
+        private async Task DownloadYtDlpAsync()
+        {
+            try
+            {
+                StatusMessage = "Downloading yt-dlp...";
+                IsProcessing = true;
+                
+                var progress = new Progress<string>(message => StatusMessage = message);
+                var success = await YtDlpManager.Instance.DownloadYtDlpAsync(progress);
+                
+                if (success)
+                {
+                    StatusMessage = "yt-dlp downloaded successfully!";
+                    await CheckYtDlpAvailabilityAsync();
+                }
+                else
+                {
+                    StatusMessage = "Failed to download yt-dlp. Please download manually from https://github.com/yt-dlp/yt-dlp/releases";
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Error downloading yt-dlp: {ex.Message}";
+            }
+            finally
+            {
+                IsProcessing = false;
+            }
+        }
+
+        private async void OnYtDlpDownloadCompleted(object? sender, EventArgs e)
+        {
+            await CheckYtDlpAvailabilityAsync();
         }
 
         private void UpdateFormatsAndQualities()

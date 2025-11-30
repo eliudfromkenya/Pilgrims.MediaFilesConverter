@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Pilgrims.MediaFilesConverter.Models;
@@ -13,14 +12,11 @@ namespace Pilgrims.MediaFilesConverter.Services
         private static readonly Lazy<YouTubeDownloadService> _instance = new(() => new YouTubeDownloadService());
         public static YouTubeDownloadService Instance => _instance.Value;
 
-        private readonly string _ytDlpPath;
+        private readonly YtDlpManager _ytDlpManager;
 
         private YouTubeDownloadService() 
         {
-            // Get the path to the bundled yt-dlp executable
-            var assemblyLocation = Assembly.GetExecutingAssembly().Location;
-            var assemblyDirectory = Path.GetDirectoryName(assemblyLocation);
-            _ytDlpPath = Path.Combine(assemblyDirectory!, "FFmpeg", "yt-dlp.exe");
+            _ytDlpManager = YtDlpManager.Instance;
         }
 
         /// <summary>
@@ -32,7 +28,7 @@ namespace Pilgrims.MediaFilesConverter.Services
                 return false;
 
             var youtubeRegex = new Regex(
-                @"^(https?://)?(www\.)?(youtube\.com/(watch\?v=|embed/|v/)|youtu\.be/)[\w\-_]{11}(&.*)?$",
+                @"^(https?://)?(www\.|m\.)?(youtube\.com/(watch\?v=|embed/|v/)|youtu\.be/)[\w\-_]{11}(&.*)?$",
                 RegexOptions.IgnoreCase);
 
             return youtubeRegex.IsMatch(url);
@@ -68,9 +64,16 @@ namespace Pilgrims.MediaFilesConverter.Services
                     ? $"--extract-audio --audio-format {format} --audio-quality {quality} --output \"{outputTemplate}\" --no-playlist \"{youtubeUrl}\""
                     : $"--format \"{formatSelector}\" --output \"{outputTemplate}\" --no-playlist \"{youtubeUrl}\"";
 
+                var ytDlpPath = _ytDlpManager.GetYtDlpPath();
+                if (string.IsNullOrEmpty(ytDlpPath))
+                {
+                    progress?.Report("yt-dlp executable not found. Please download it from https://github.com/yt-dlp/yt-dlp/releases");
+                    return null;
+                }
+
                 var processInfo = new ProcessStartInfo
                 {
-                    FileName = _ytDlpPath,
+                    FileName = ytDlpPath,
                     Arguments = arguments,
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
@@ -140,32 +143,16 @@ namespace Pilgrims.MediaFilesConverter.Services
         /// </summary>
         public async Task<bool> IsYtDlpAvailableAsync()
         {
-            try
-            {
-                // Check if the bundled yt-dlp exists
-                if (!File.Exists(_ytDlpPath))
-                    return false;
+            var result = await _ytDlpManager.CheckAvailabilityAsync();
+            return result.IsAvailable;
+        }
 
-                var processInfo = new ProcessStartInfo
-                {
-                    FileName = _ytDlpPath,
-                    Arguments = "--version",
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    CreateNoWindow = true
-                };
-
-                using var process = new Process { StartInfo = processInfo };
-                process.Start();
-                await process.WaitForExitAsync();
-
-                return process.ExitCode == 0;
-            }
-            catch
-            {
-                return false;
-            }
+        /// <summary>
+        /// Gets detailed information about yt-dlp availability
+        /// </summary>
+        public async Task<YtDlpAvailabilityResult> GetYtDlpAvailabilityAsync()
+        {
+            return await _ytDlpManager.CheckAvailabilityAsync();
         }
 
         /// <summary>
@@ -178,9 +165,13 @@ namespace Pilgrims.MediaFilesConverter.Services
 
             try
             {
+                var ytDlpPath = _ytDlpManager.GetYtDlpPath();
+                if (string.IsNullOrEmpty(ytDlpPath))
+                    return null;
+
                 var processInfo = new ProcessStartInfo
                 {
-                    FileName = _ytDlpPath,
+                    FileName = ytDlpPath,
                     Arguments = $"--get-title --get-duration \"{youtubeUrl}\"",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
