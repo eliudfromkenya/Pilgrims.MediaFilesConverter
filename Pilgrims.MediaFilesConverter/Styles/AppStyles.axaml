@@ -64,27 +64,46 @@
 
     <!-- Modern TextBox Style -->
     <Style Selector="TextBox.modern">
-        <Setter Property="BorderBrush" Value="#D1D5DB"/>
+        <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="CornerRadius" Value="6"/>
         <Setter Property="Padding" Value="12,8"/>
-        <Setter Property="Background" Value="White"/>
         <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        <Setter Property="SelectionBrush" Value="{DynamicResource PrimaryBrush}"/>
+        <Setter Property="SelectionForegroundBrush" Value="{DynamicResource TextOnPrimaryBrush}"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource TextPrimaryBrush}"/>
     </Style>
     
     <Style Selector="TextBox.modern:focus">
-        <Setter Property="BorderBrush" Value="#007ACC"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderFocusBrush}"/>
         <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <Style Selector="TextBox.modern:pointerover">
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderHoverBrush}"/>
     </Style>
 
     <!-- Modern ComboBox Style -->
     <Style Selector="ComboBox.modern">
-        <Setter Property="BorderBrush" Value="#D1D5DB"/>
+        <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="CornerRadius" Value="6"/>
         <Setter Property="Padding" Value="12,8"/>
-        <Setter Property="Background" Value="White"/>
         <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style Selector="ComboBox.modern:focus">
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderFocusBrush}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <Style Selector="ComboBox.modern:pointerover">
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderHoverBrush}"/>
     </Style>
 
     <!-- Progress Bar Style -->

@@ -1,5 +1,43 @@
 # YouTube Download Fix
 
+## Issue Description
+YouTube video downloads were failing when URLs contained playlist parameters, causing the application to hang during video information retrieval.
+
+## Root Cause
+The `GetVideoInfoAsync` method in `YouTubeDownloadService.cs` was missing the `--no-playlist` flag when invoking `yt-dlp`. This caused the tool to attempt processing entire playlists instead of individual videos, leading to hangs when URLs contained playlist parameters.
+
+## Specific Problem URL
+```
+https://www.youtube.com/watch?v=y7DKfhKV2us&list=RDy7DKfhKV2us&start_radio=1&pp=ygUQZXdlIG9ueWFsYSBiaW9zaaAHAdIHCQkVCgGHKiGM7w%3D%3D
+```
+
+This URL contains playlist parameters (`&list=RDy7DKfhKV2us&start_radio=1&pp=...`) which caused `yt-dlp` to hang while trying to process the playlist instead of the individual video.
+
+## Solution
+Added the `--no-playlist` flag to the `GetVideoInfoAsync` method's `yt-dlp` arguments:
+
+### Before (Line ~184 in YouTubeDownloadService.cs):
+```csharp
+Arguments = $"--get-title --get-duration \"{youtubeUrl}\"",
+```
+
+### After:
+```csharp
+Arguments = $"--no-playlist --get-title --get-duration \"{youtubeUrl}\"",
+```
+
+## Verification
+- ✅ Video info retrieval now works with playlist URLs
+- ✅ Download functionality successfully completed (121MB, 6:54 duration)
+- ✅ All 9 unit tests still pass
+- ✅ Direct command test confirmed the fix resolves hanging issues
+
+## Files Modified
+- `Pilgrims.MediaFilesConverter/Services/YouTubeDownloadService.cs` - Added `--no-playlist` flag to `GetVideoInfoAsync` method
+
+## Note
+The `--no-playlist` flag was already being used in the `DownloadVideoAsync` method but was missing from the `GetVideoInfoAsync` method. This fix ensures consistency across both methods.
+
 ## Problem
 The application was unable to download YouTube media because the `yt-dlp.exe` executable was missing from the expected location (`FFmpeg/yt-dlp.exe`).
 

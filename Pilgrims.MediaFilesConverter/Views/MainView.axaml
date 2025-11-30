@@ -190,7 +190,7 @@
                        Foreground="#2D3748"/>
             <TextBlock Text="Professional media conversion made simple" 
                        FontSize="14" 
-                       Foreground="#718096"/>
+                       Classes="secondary"/>
           </StackPanel>
         </StackPanel>
         
@@ -307,14 +307,14 @@
                 <TextBlock Text="or click 'Add Files' to browse" 
                            FontSize="16" 
                            HorizontalAlignment="Center"
-                           Foreground="#718096"/>
+                           Classes="secondary"/>
                 <Border Background="#F7FAFC" 
                         CornerRadius="8" 
                         Padding="16,12"
                         HorizontalAlignment="Center">
                   <StackPanel Orientation="Horizontal" Spacing="8">
                     <TextBlock Text="✨" FontSize="14"/>
-                    <TextBlock Text="Supported formats:" FontSize="14" FontWeight="Medium" Foreground="#4A5568"/>
+                    <TextBlock Text="Supported formats:" FontSize="14" FontWeight="Medium" Classes="secondary"/>
                     <TextBlock Text="MP4, AVI, MOV, MP3, WAV, FLAC, and more" 
                                FontSize="14" 
                                Foreground="#2B6CB0"/>
@@ -355,14 +355,14 @@
                             <StackPanel Orientation="Horizontal" Spacing="15" Margin="0,2,0,0">
                               <TextBlock Text="{Binding FileSizeFormatted}" 
                                          FontSize="12" 
-                                         Foreground="#718096"/>
+                                         Classes="secondary"/>
                               <TextBlock Text="{Binding Duration}" 
                                          FontSize="12" 
-                                         Foreground="#718096"
+                                         Classes="secondary"
                                          IsVisible="{Binding Duration, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
                               <TextBlock Text="{Binding Resolution}" 
                                          FontSize="12" 
-                                         Foreground="#718096"
+                                         Classes="secondary"
                                          IsVisible="{Binding Resolution, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
                             </StackPanel>
                           </StackPanel>
@@ -483,7 +483,7 @@
                   </Border>
                   
                   <StackPanel Spacing="12">
-                    <TextBlock Text="Format" FontSize="14" FontWeight="Medium" Foreground="#4A5568"/>
+                    <TextBlock Text="Format" FontSize="14" FontWeight="Medium" Classes="secondary"/>
                     <ComboBox SelectedItem="{Binding ConversionSettings.OutputFormat}"
                               ItemsSource="{Binding OutputFormats}"
                               Classes="modern"
@@ -491,7 +491,7 @@
                   </StackPanel>
 
                   <StackPanel Spacing="12">
-                    <TextBlock Text="Output Directory" FontSize="14" FontWeight="Medium" Foreground="#4A5568"/>
+                    <TextBlock Text="Output Directory" FontSize="14" FontWeight="Medium" Classes="secondary"/>
                     <Grid>
                       <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -526,7 +526,7 @@
                   </Border>
                   
                   <StackPanel Spacing="12">
-                    <TextBlock Text="Video Quality" FontSize="14" FontWeight="Medium" Foreground="#4A5568"/>
+                    <TextBlock Text="Video Quality" FontSize="14" FontWeight="Medium" Classes="secondary"/>
                     <ComboBox x:Name="cboVideoQuality"
 					SelectedItem="{Binding ConversionSettings.VideoQuality, 
 					Converter={StaticResource VideoQualityConverter}

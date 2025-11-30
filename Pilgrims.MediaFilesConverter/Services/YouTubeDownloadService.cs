@@ -172,7 +172,7 @@ namespace Pilgrims.MediaFilesConverter.Services
                 var processInfo = new ProcessStartInfo
                 {
                     FileName = ytDlpPath,
-                    Arguments = $"--get-title --get-duration \"{youtubeUrl}\"",
+                    Arguments = $"--no-playlist --get-title --get-duration \"{youtubeUrl}\"",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,

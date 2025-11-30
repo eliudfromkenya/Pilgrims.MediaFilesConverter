@@ -16,10 +16,17 @@
             <SolidColorBrush x:Key="HeaderBrush">#E0F2FE</SolidColorBrush>
             
             <!-- Text Colors -->
-            <SolidColorBrush x:Key="TextPrimaryBrush">#1E293B</SolidColorBrush>
-            <SolidColorBrush x:Key="TextSecondaryBrush">#64748B</SolidColorBrush>
-            <SolidColorBrush x:Key="TextMutedBrush">#94A3B8</SolidColorBrush>
+            <SolidColorBrush x:Key="TextPrimaryBrush">#0F172A</SolidColorBrush>
+            <SolidColorBrush x:Key="TextSecondaryBrush">#334155</SolidColorBrush>
+            <SolidColorBrush x:Key="TextMutedBrush">#475569</SolidColorBrush>
             <SolidColorBrush x:Key="TextOnPrimaryBrush">#FFFFFF</SolidColorBrush>
+            
+            <!-- Input Control Colors -->
+            <SolidColorBrush x:Key="InputBackgroundBrush">#FFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="InputBorderBrush">#CBD5E1</SolidColorBrush>
+            <SolidColorBrush x:Key="InputBorderHoverBrush">#94A3B8</SolidColorBrush>
+            <SolidColorBrush x:Key="InputBorderFocusBrush">#3B82F6</SolidColorBrush>
+            <SolidColorBrush x:Key="InputPlaceholderBrush">#64748B</SolidColorBrush>
             
             <!-- Border Colors -->
             <SolidColorBrush x:Key="BorderBrush">#E2E8F0</SolidColorBrush>
@@ -80,5 +87,118 @@
 
     <Style Selector="TextBlock.muted">
         <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}"/>
+    </Style>
+
+    <!-- NumericUpDown Style -->
+    <Style Selector="NumericUpDown">
+        <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="Padding" Value="8,4"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <Style Selector="NumericUpDown:focus">
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderFocusBrush}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <!-- Modern TextBox Style for Light Theme -->
+    <Style Selector="TextBox.modern">
+        <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="CaretBrush" Value="{DynamicResource TextPrimaryBrush}"/>
+        <Setter Property="SelectionBrush" Value="{DynamicResource PrimaryBrush}"/>
+    </Style>
+    
+    <Style Selector="TextBox.modern:focus">
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderFocusBrush}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <Style Selector="TextBox.modern:pointerover">
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderHoverBrush}"/>
+    </Style>
+
+    <!-- Modern ComboBox Style for Light Theme -->
+    <Style Selector="ComboBox.modern">
+        <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="6"/>
+        <Setter Property="Padding" Value="12,8"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+    </Style>
+
+    <Style Selector="ComboBox.modern:focus">
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderFocusBrush}"/>
+        <Setter Property="BorderThickness" Value="2"/>
+    </Style>
+
+    <Style Selector="ComboBox.modern:pointerover">
+        <Setter Property="BorderBrush" Value="{DynamicResource InputBorderHoverBrush}"/>
+    </Style>
+
+    <!-- ComboBoxItem Style for Light Theme -->
+    <Style Selector="ComboBoxItem">
+        <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    </Style>
+
+    <Style Selector="ComboBoxItem:selected">
+        <Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextOnPrimaryBrush}"/>
+    </Style>
+
+    <Style Selector="ComboBoxItem:pointerover">
+        <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+    </Style>
+
+    <!-- CheckBox Style for Light Theme -->
+    <Style Selector="CheckBox">
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+        <Setter Property="FontSize" Value="14"/>
+    </Style>
+
+    <!-- Slider Style for Light Theme -->
+    <Style Selector="Slider">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+    </Style>
+
+    <!-- Progress Bar Style -->
+    <Style Selector="ProgressBar">
+        <Setter Property="Foreground" Value="{DynamicResource PrimaryBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
+    </Style>
+
+    <!-- ListBox Style for Light Theme -->
+    <Style Selector="ListBox">
+        <Setter Property="Background" Value="{DynamicResource CardBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    </Style>
+
+    <Style Selector="ListBoxItem">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    </Style>
+
+    <Style Selector="ListBoxItem:selected">
+        <Setter Property="Background" Value="{DynamicResource PrimaryBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextOnPrimaryBrush}"/>
+    </Style>
+
+    <Style Selector="ListBoxItem:pointerover">
+        <Setter Property="Background" Value="{DynamicResource SurfaceBrush}"/>
     </Style>
 </Styles>

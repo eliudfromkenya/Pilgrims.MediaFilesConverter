@@ -222,7 +222,7 @@
                                    Foreground="#2D3748"/>
                         <TextBlock Text="Paste your YouTube video link below" 
                                    FontSize="14" 
-                                   Foreground="#718096"/>
+                                   Classes="secondary"/>
                       </StackPanel>
                     </StackPanel>
                   </Border>
@@ -318,7 +318,7 @@
                 <TextBlock Text="Download Type" 
                            FontWeight="Medium" 
                            FontSize="14" 
-                           Foreground="#4A5568"/>
+                           Classes="secondary"/>
                 
                 <ComboBox SelectedItem="{Binding SelectedDownloadType}"
                           ItemsSource="{Binding DownloadTypes}"
@@ -338,7 +338,7 @@
                   <TextBlock Text="{Binding FormatLabel}" 
                              FontWeight="Medium" 
                              FontSize="14" 
-                             Foreground="#4A5568"/>
+                             Classes="secondary"/>
                   
                   <ComboBox SelectedItem="{Binding SelectedFormat}"
                             ItemsSource="{Binding AvailableFormats}"
@@ -349,7 +349,7 @@
                   <TextBlock Text="{Binding QualityLabel}" 
                              FontWeight="Medium" 
                              FontSize="14" 
-                             Foreground="#4A5568"/>
+                             Classes="secondary"/>
                   
                   <ComboBox SelectedItem="{Binding SelectedQuality}"
                             ItemsSource="{Binding AvailableQualities}"
