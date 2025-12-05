@@ -1,0 +1,133 @@
+<Window
+    x:Class="Pilgrims.MediaFilesConverter.Views.UtilityUpgradeModal"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:Pilgrims.MediaFilesConverter.ViewModels"
+    Title="Utility Upgrade Manager"
+    Width="800"
+    Height="600"
+    MinWidth="700"
+    MinHeight="500"
+    WindowStartupLocation="CenterOwner"
+    mc:Ignorable="d"
+    x:DataType="vm:UtilityUpgradeViewModel">
+
+  <Border Background="White" CornerRadius="8" Padding="20">
+    <Grid RowDefinitions="Auto,*,Auto">
+      <!-- Header -->
+      <StackPanel Grid.Row="0" Margin="0,0,0,20">
+        <TextBlock Text="Utility Upgrade Manager" 
+                   FontSize="24" 
+                   FontWeight="Bold" 
+                   HorizontalAlignment="Center" />
+        <TextBlock Text="Manage FFmpeg and yt-dlp utilities" 
+                   FontSize="14" 
+                   Foreground="Gray" 
+                   HorizontalAlignment="Center" 
+                   Margin="0,5,0,0"/>
+      </StackPanel>
+
+      <!-- Main Content -->
+      <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <StackPanel Spacing="20">
+          
+          <!-- FFmpeg Section -->
+          <Border Background="#F8F9FA" CornerRadius="8" Padding="15" BorderBrush="#E9ECEF" BorderThickness="1">
+            <StackPanel Spacing="10">
+              <TextBlock Text="FFmpeg" FontSize="18" FontWeight="SemiBold" />
+              
+              <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Spacing="5">
+                  <TextBlock Text="{Binding FFmpegStatus}" FontSize="12" Foreground="{Binding FFmpegStatus, Converter={StaticResource StatusColorConverter}}" />
+                  <TextBlock Text="{Binding FFmpegVersion}" FontSize="12" />
+                  <TextBlock Text="{Binding FFmpegPath}" FontSize="10" Foreground="Gray" TextWrapping="Wrap" />
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                  <Button Content="Check Update" 
+                          Command="{Binding CheckFfmpegUpdateCommand}" 
+                          IsEnabled="{Binding !FFmpegIsBusy}" 
+                          Padding="10,5" />
+                  <Button Content="Upgrade" 
+                          Command="{Binding UpgradeFfmpegCommand}" 
+                          IsEnabled="{Binding FFmpegUpdateAvailable}" 
+                          Background="#28A745" 
+                          Foreground="White" 
+                          Padding="10,5" />
+                </StackPanel>
+              </Grid>
+              
+              <ProgressBar Value="{Binding FFmpegProgress}" 
+                           IsVisible="{Binding FFmpegIsBusy}" 
+                           Height="20" 
+                           CornerRadius="4" />
+            </StackPanel>
+          </Border>
+
+          <!-- yt-dlp Section -->
+          <Border Background="#F8F9FA" CornerRadius="8" Padding="15" BorderBrush="#E9ECEF" BorderThickness="1">
+            <StackPanel Spacing="10">
+              <TextBlock Text="yt-dlp" FontSize="18" FontWeight="SemiBold" />
+              
+              <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" Spacing="5">
+                  <TextBlock Text="{Binding YtDlpStatus}" FontSize="12" Foreground="{Binding YtDlpStatus, Converter={StaticResource StatusColorConverter}}" />
+                  <TextBlock Text="{Binding YtDlpVersion}" FontSize="12" />
+                  <TextBlock Text="{Binding YtDlpPath}" FontSize="10" Foreground="Gray" TextWrapping="Wrap" />
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                  <Button Content="Check Update" 
+                          Command="{Binding CheckYtDlpUpdateCommand}" 
+                          IsEnabled="{Binding !YtDlpIsBusy}" 
+                          Padding="10,5" />
+                  <Button Content="Upgrade" 
+                          Command="{Binding UpgradeYtDlpCommand}" 
+                          IsEnabled="{Binding YtDlpUpdateAvailable}" 
+                          Background="#28A745" 
+                          Foreground="White" 
+                          Padding="10,5" />
+                </StackPanel>
+              </Grid>
+              
+              <ProgressBar Value="{Binding YtDlpProgress}" 
+                           IsVisible="{Binding YtDlpIsBusy}" 
+                           Height="20" 
+                           CornerRadius="4" />
+            </StackPanel>
+          </Border>
+
+          <!-- Global Actions -->
+          <Border Background="#E3F2FD" CornerRadius="8" Padding="15" BorderBrush="#2196F3" BorderThickness="1">
+            <StackPanel Spacing="10">
+              <TextBlock Text="Global Actions" FontSize="16" FontWeight="SemiBold" />
+              <TextBlock Text="Check for updates on all utilities at once" FontSize="12" Foreground="Gray" />
+              <Button Content="Check All Updates" 
+                      Command="{Binding CheckAllUpdatesCommand}" 
+                      Background="#2196F3" 
+                      Foreground="White" 
+                      Padding="15,8" 
+                      HorizontalAlignment="Left" />
+            </StackPanel>
+          </Border>
+
+        </StackPanel>
+      </ScrollViewer>
+
+      <!-- Footer -->
+      <StackPanel Grid.Row="2" Orientation="Horizontal" 
+                  HorizontalAlignment="Right" 
+                  Spacing="10" 
+                  Margin="0,20,0,0">
+        <Button Content="Close" 
+                Click="Close_Click" 
+                Padding="15,8" 
+                Background="#6C757D" 
+                Foreground="White" />
+      </StackPanel>
+
+    </Grid>
+  </Border>
+</Window>

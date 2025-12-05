@@ -4,6 +4,9 @@ using Avalonia.Markup.Xaml;
 using FFMpegCore;
 using System;
 using System.IO;
+using System.Net.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 using Pilgrims.MediaFilesConverter.ViewModels;
 using Pilgrims.MediaFilesConverter.Views;
@@ -13,15 +16,56 @@ namespace Pilgrims.MediaFilesConverter;
 
 public partial class App : Application
 {
+    private IServiceProvider? _serviceProvider;
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
+        
+        // Initialize dependency injection
+        ConfigureServices();
         
         // Initialize theme service
         var themeService = ThemeService.Instance;
         
         // Configure FFMpegCore with FFmpeg binary path
         ConfigureFFMpeg();
+    }
+
+    private void ConfigureServices()
+    {
+        var services = new ServiceCollection();
+
+        // Configure logging
+        services.AddLogging(builder =>
+        {
+            builder.AddConsole();
+            builder.AddDebug();
+            builder.SetMinimumLevel(LogLevel.Information);
+        });
+
+        // Configure HttpClient
+        services.AddHttpClient();
+
+        // Add utility upgrade services
+        services.AddUtilityUpgradeServices();
+
+        // Register existing services
+        services.AddSingleton<MediaConverterService>();
+        services.AddSingleton<YouTubeDownloadService>();
+        services.AddSingleton<YtDlpManager>();
+
+        // Register view models
+        services.AddTransient<MainViewModel>();
+        services.AddTransient<YouTubeDownloadViewModel>();
+        services.AddTransient<VideoPreviewViewModel>();
+        services.AddTransient<UtilityUpgradeViewModel>();
+
+        // Build service provider
+        _serviceProvider = services.BuildServiceProvider();
+
+        // Initialize service locator
+        ServiceLocator.Initialize(_serviceProvider);
     }
     
     private void ConfigureFFMpeg()
@@ -70,14 +114,14 @@ public partial class App : Application
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainViewModel()
+                DataContext = _serviceProvider!.GetRequiredService<MainViewModel>()
             };
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
             singleViewPlatform.MainView = new MainView
             {
-                DataContext = new MainViewModel()
+                DataContext = _serviceProvider.GetRequiredService<MainViewModel>()
             };
         }
 

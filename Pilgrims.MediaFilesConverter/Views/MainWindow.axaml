@@ -15,10 +15,20 @@
     WindowState="Maximized"
     mc:Ignorable="d">
 
-    <dialogHost:DialogHost CloseOnClickAway="False" IsOpen="False">
-        <dialogHost:DialogHost.DialogContent>
-            <views:YouTubeDownloadModal x:Name="YoutubePage" />
-        </dialogHost:DialogHost.DialogContent>
-        <views:MainView />
-    </dialogHost:DialogHost>
+    <Grid RowDefinitions="Auto,*">
+        <!-- Menu Bar -->
+        <Menu Grid.Row="0" Background="LightGray">
+            <MenuItem Header="Tools">
+                <MenuItem Header="Utility Upgrade Manager" 
+                          Click="OpenUtilityUpgradeModal_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <dialogHost:DialogHost Grid.Row="1" CloseOnClickAway="False" IsOpen="False">
+            <dialogHost:DialogHost.DialogContent>
+                <views:YouTubeDownloadModal x:Name="YoutubePage" />
+            </dialogHost:DialogHost.DialogContent>
+            <views:MainView />
+        </dialogHost:DialogHost>
+    </Grid>
 </Window>
