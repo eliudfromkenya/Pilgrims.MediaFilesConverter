@@ -50,8 +50,10 @@ namespace Pilgrims.MediaFilesConverter.Services
 
         private void ConfigureOutput(FFMpegArgumentOptions options, ConversionSettings settings, IMediaAnalysis mediaInfo)
         {
-            // Set video codec and quality
-            if (mediaInfo.VideoStreams.Count > 0)
+            var isAudioOnly = IsAudioOutputFormat(settings.OutputFormat);
+
+            // Set video codec and quality only when output is a video container
+            if (!isAudioOnly && mediaInfo.VideoStreams.Count > 0)
             {
                 switch (settings.VideoQuality)
                 {
@@ -90,20 +92,47 @@ namespace Pilgrims.MediaFilesConverter.Services
             // Set audio codec and quality
             if (mediaInfo.AudioStreams.Count > 0)
             {
-                switch (settings.AudioQuality)
+                if (string.Equals(settings.OutputFormat, "mp3", StringComparison.OrdinalIgnoreCase))
                 {
-                    case Models.AudioQuality.Low:
-                        options.WithAudioCodec(AudioCodec.Aac).WithAudioBitrate(96);
-                        break;
-                    case Models.AudioQuality.Medium:
-                        options.WithAudioCodec(AudioCodec.Aac).WithAudioBitrate(128);
-                        break;
-                    case Models.AudioQuality.High:
-                        options.WithAudioCodec(AudioCodec.Aac).WithAudioBitrate(192);
-                        break;
-                    case Models.AudioQuality.VeryHigh:
-                        options.WithAudioCodec(AudioCodec.Aac).WithAudioBitrate(320);
-                        break;
+                    switch (settings.AudioQuality)
+                    {
+                        case Models.AudioQuality.Low:
+                            options.WithAudioCodec(AudioCodec.LibMp3Lame).WithAudioBitrate(96);
+                            break;
+                        case Models.AudioQuality.Medium:
+                            options.WithAudioCodec(AudioCodec.LibMp3Lame).WithAudioBitrate(128);
+                            break;
+                        case Models.AudioQuality.High:
+                            options.WithAudioCodec(AudioCodec.LibMp3Lame).WithAudioBitrate(192);
+                            break;
+                        case Models.AudioQuality.VeryHigh:
+                            options.WithAudioCodec(AudioCodec.LibMp3Lame).WithAudioBitrate(320);
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (settings.AudioQuality)
+                    {
+                        case Models.AudioQuality.Low:
+                            options.WithAudioCodec(AudioCodec.Aac).WithAudioBitrate(96);
+                            break;
+                        case Models.AudioQuality.Medium:
+                            options.WithAudioCodec(AudioCodec.Aac).WithAudioBitrate(128);
+                            break;
+                        case Models.AudioQuality.High:
+                            options.WithAudioCodec(AudioCodec.Aac).WithAudioBitrate(192);
+                            break;
+                        case Models.AudioQuality.VeryHigh:
+                            options.WithAudioCodec(AudioCodec.Aac).WithAudioBitrate(320);
+                            break;
+                    }
+                }
+
+                if (isAudioOnly)
+                {
+                    // Ensure video is not included in audio-only outputs
+                    options.WithCustomArgument("-vn");
                 }
             }
 
@@ -118,6 +147,18 @@ namespace Pilgrims.MediaFilesConverter.Services
                     options.WithDuration(duration);
                 }
             }
+        }
+
+        private static bool IsAudioOutputFormat(string format)
+        {
+            if (string.IsNullOrWhiteSpace(format)) return false;
+            var audioFormats = ConversionSettings.GetSupportedAudioFormats();
+            foreach (var f in audioFormats)
+            {
+                if (string.Equals(f, format, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+            return false;
         }
 
         public async Task<bool> SplitMediaAsync(MediaFile mediaFile, double splitTimeSeconds, 
