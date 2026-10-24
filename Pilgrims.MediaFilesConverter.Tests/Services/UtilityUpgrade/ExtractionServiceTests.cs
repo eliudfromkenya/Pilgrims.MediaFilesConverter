@@ -94,7 +94,7 @@ namespace Pilgrims.MediaFilesConverter.Tests.Services.UtilityUpgrade
         {
             // Arrange
             _mockZipExtractor.Setup(x => x.SupportedFormats).Returns(new[] { ".zip" });
-            _mockTarGzExtractor.Setup(x => x.SupportedFormats).Returns(new[] { ".tar.gz", ".tgz" });
+            _mockTarGzExtractor.Setup(x => x.SupportedFormats).Returns(new[] { ".tar.gzLocalCache.tgz" });
 
             // Act
             var result = _extractionService.GetSupportedFormats();
